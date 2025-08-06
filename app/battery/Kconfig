@@ -1,0 +1,7 @@
+menu "Battery Configuration"
+config BATTERY
+    bool "Enable BATTERY"
+    default y
+    help
+        This enables BATTERY in the app
+endmenu

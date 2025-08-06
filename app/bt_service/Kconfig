@@ -1,0 +1,7 @@
+menu "BT SERVICE Configuration"
+config BT_SERVICE
+    bool "Enable BT_SERVICE"
+    default y
+    help
+        This enables BT_SERVICE in the app
+endmenu

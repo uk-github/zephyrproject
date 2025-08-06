@@ -1,0 +1,3 @@
+rsource "$ZEPHYR_BASE/Kconfig.zephyr"
+rsource "bt_service/Kconfig"
+rsource "battery/Kconfig"
