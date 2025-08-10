@@ -8,13 +8,11 @@ def parse_args():
     parser.add_argument("--pristine", action="store_true", help="Use pristine build")
     return parser.parse_args()
 
-args = parse_args()
-
 def run():
+    args = parse_args()
     build_cmd = f"west build -b {args.board} {args.app}"
     if args.pristine:
         build_cmd += " --pristine"
-    
     if os.system(build_cmd) == 0:
         print("\033[91mBuild success \033[0m")
         os.system("west flash")
