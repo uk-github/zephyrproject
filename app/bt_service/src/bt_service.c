@@ -17,8 +17,15 @@ msg_handler_t handler[] = {
 
 };
 
+static void conn_listener(uint8_t status, uint8_t reason) {
+    BEGIN();
+    LOG_INFO("status: %u, reason: %u", status, reason);
+    END();
+}
+
 int bt_service_start(void) {
     BEGIN();
+    set_conn_listener(conn_listener);
     start_bluetooth();
     END();
     return 0;
@@ -54,5 +61,7 @@ void bt_service_th_cb(void *arg1, void *arg2, void *arg3) {
 }
 
 void send_data_to_bt(const uint8_t *msg, uint16_t len) {
+    BEGIN();
     send_data(msg, len);
+    END();
 }

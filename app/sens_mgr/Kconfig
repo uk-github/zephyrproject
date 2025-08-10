@@ -1,0 +1,7 @@
+menu "SENS MGR Configuration"
+config SENS_MGR
+    bool "Enable SENS_MGR"
+    default y
+    help
+        This enables SENS_MGR in the app
+endmenu

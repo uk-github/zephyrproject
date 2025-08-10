@@ -64,25 +64,12 @@ static const struct bt_data sd[] = {
     BT_DATA(BT_DATA_URI, url_data, sizeof(url_data)),
 };
 
-static uint8_t notifer_indx = 0;
-static ble_conn_notifer_t *notifer_table[MAX_NOTIFIEES];
-
-int set_conn_listener(ble_conn_notifer_t *notifier) {
+conn_noti_cb notify_conn_status;
+int set_conn_listener(conn_noti_cb notifier) {
     BEGIN();
-    notifer_table[notifer_indx++] = notifier;
-    notifer_indx %= MAX_NOTIFIEES;
+    notify_conn_status = notifier;
     END();
     return 0;
-}
-
-void notify_conn_status(uint8_t status, uint8_t reason) {
-    BEGIN();
-    for (int i = 0; i < MAX_NOTIFIEES; i++) {
-        if (notifer_table[i]) {
-            notifer_table[i]->conn_noti_cb(status, reason);
-        }
-    }
-    END();
 }
 
 static void connected(struct bt_conn *conn, uint8_t err) {
@@ -91,14 +78,14 @@ static void connected(struct bt_conn *conn, uint8_t err) {
 		LOG_ERROR("Connection failed err 0x%02x %s", err, bt_hci_err_to_str(err));
         return;
 	}
-    notify_conn_status(0, err); // Notify success
+    if (notify_conn_status) notify_conn_status(0, err); // Notify success
     END();
 }
 
 static void disconnected(struct bt_conn *conn, uint8_t reason) {
     BEGIN();
 	LOG_INFO("Disconnected, reason 0x%02x %s", reason, bt_hci_err_to_str(reason));
-    notify_conn_status(1, reason);
+    if (notify_conn_status) notify_conn_status(1, reason);
     END();
 }
 

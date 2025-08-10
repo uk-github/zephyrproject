@@ -6,6 +6,7 @@ project(app)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/bt_service/inc)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/battery/inc)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/sens_mgr/inc)
 
 if(CONFIG_BT_SERVICE)
 add_subdirectory(bt_service)
@@ -13,6 +14,10 @@ endif()
 
 if(CONFIG_BATTERY)
 add_subdirectory(battery)
+endif()
+
+if(CONFIG_BATTERY)
+add_subdirectory(sens_mgr)
 endif()
 
 target_sources(app PRIVATE 

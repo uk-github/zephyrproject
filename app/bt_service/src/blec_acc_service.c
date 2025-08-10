@@ -20,6 +20,9 @@ static struct bt_uuid_128 acc_serivce_uuid = BT_UUID_INIT_128(
 static struct bt_uuid_128 acc_serivce_char_uuid = BT_UUID_INIT_128(
     BT_UUID_128_ENCODE(0xabcdef01, 0x2345, 0x6789, 0xabcd, 0xef0123456789));
 
+static struct bt_uuid_128 acc_service_c_uuid = BT_UUID_INIT_128(
+    BT_UUID_128_ENCODE(0xd062b97d, 0xe392, 0x42d0, 0x8ed8, 0x42cbf5a492b0));
+
 static char acc_sve_value[20] = "Hello BLE";
 
 static ssize_t read_my_char(struct bt_conn *conn,
@@ -56,7 +59,13 @@ static void ccc_cfg_changed(const struct bt_gatt_attr *attr, uint16_t value) {
 BT_GATT_SERVICE_DEFINE(acc_serivce,
     BT_GATT_PRIMARY_SERVICE(&acc_serivce_uuid),
     BT_GATT_CHARACTERISTIC(&acc_serivce_char_uuid.uuid,
-                           BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE | BT_GATT_CHRC_NOTIFY | BT_GATT_CHRC_INDICATE,
+                           BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE | BT_GATT_CHRC_NOTIFY,
+                           BT_GATT_PERM_READ | BT_GATT_PERM_WRITE,
+                           read_my_char, write_my_char, &acc_sve_value),
+    BT_GATT_CCC(ccc_cfg_changed, BT_GATT_PERM_READ | BT_GATT_PERM_WRITE),
+
+    BT_GATT_CHARACTERISTIC(&acc_service_c_uuid.uuid,
+                           BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE | BT_GATT_CHRC_INDICATE,
                            BT_GATT_PERM_READ | BT_GATT_PERM_WRITE,
                            read_my_char, write_my_char, &acc_sve_value),
     BT_GATT_CCC(ccc_cfg_changed, BT_GATT_PERM_READ | BT_GATT_PERM_WRITE),
