@@ -12,3 +12,7 @@ int sens_mgr_start(void) {
     END();
     return 0;
 }
+
+void func_from_new_monitor() {
+    return;
+}

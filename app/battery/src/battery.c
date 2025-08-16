@@ -21,11 +21,26 @@ int battery_start(void) {
 
 void battery_th_cb(void *arg1, void *arg2, void *arg3) {
     BEGIN();
+    batt_info_t bat = {
+        .bat_full = 0,
+        .bat_level = 10,
+        .chg_status = 1,
+        .temp_c = 35
+    };
     while (1) {
         LOG_INFO("inside thread");
-        uint8_t data[] = {1,2,3,4};
-        send_data_to_bt(data, sizeof(data));
-        k_sleep(K_SECONDS(60));
+        if (bat.chg_status == 1)  bat.bat_level += 1;
+        else bat.bat_level -= 1;
+
+        if (bat.bat_level == 100) {
+            bat.bat_full = 1;
+            bat.chg_status = 0;
+        } else if(bat.bat_level == 0) {
+            bat.chg_status = 1;
+        } else bat.bat_full = 0;
+
+        send_data_to_bt((const uint8_t *) &bat, sizeof(bat));
+        k_sleep(K_SECONDS(1));
     }
     END();
 }

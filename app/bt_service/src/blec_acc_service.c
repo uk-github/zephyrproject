@@ -49,9 +49,18 @@ static ssize_t write_my_char(struct bt_conn *conn,
 }
 
 static uint16_t notify_enabled;
-static void ccc_cfg_changed(const struct bt_gatt_attr *attr, uint16_t value) {
+static uint16_t indication_enabled;
+
+static void ccc_notify_cb(const struct bt_gatt_attr *attr, uint16_t value) {
     BEGIN();
     notify_enabled = value;
+    LOG_INFO("CCCD changed: %s", notify_enabled ? "enabled" : "disabled");
+    END();
+}
+
+static void ccc_indication_cb(const struct bt_gatt_attr *attr, uint16_t value) {
+    BEGIN();
+    indication_enabled = value;
     LOG_INFO("CCCD changed: %s", notify_enabled ? "enabled" : "disabled");
     END();
 }
@@ -62,13 +71,13 @@ BT_GATT_SERVICE_DEFINE(acc_serivce,
                            BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE | BT_GATT_CHRC_NOTIFY,
                            BT_GATT_PERM_READ | BT_GATT_PERM_WRITE,
                            read_my_char, write_my_char, &acc_sve_value),
-    BT_GATT_CCC(ccc_cfg_changed, BT_GATT_PERM_READ | BT_GATT_PERM_WRITE),
+    BT_GATT_CCC(ccc_notify_cb, BT_GATT_PERM_READ | BT_GATT_PERM_WRITE),
 
     BT_GATT_CHARACTERISTIC(&acc_service_c_uuid.uuid,
                            BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE | BT_GATT_CHRC_INDICATE,
                            BT_GATT_PERM_READ | BT_GATT_PERM_WRITE,
                            read_my_char, write_my_char, &acc_sve_value),
-    BT_GATT_CCC(ccc_cfg_changed, BT_GATT_PERM_READ | BT_GATT_PERM_WRITE),
+    BT_GATT_CCC(ccc_indication_cb, BT_GATT_PERM_READ | BT_GATT_PERM_WRITE),
 );
 
 void send_data(const uint8_t *msg, uint16_t len) {
@@ -79,5 +88,10 @@ void send_data(const uint8_t *msg, uint16_t len) {
     } else {
         LOG_WARN("not enabled");
     }
+    END();
+}
+
+void send_with_ack(const uint8_t *msg, uint16_t len) {
+    BEGIN();
     END();
 }
