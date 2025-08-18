@@ -53,7 +53,7 @@ void bt_service_th_cb(void *arg1, void *arg2, void *arg3) {
         msg_t msg = {0, };
         int ret = k_msgq_get(&bt_svc_msgq, &msg, K_FOREVER);
         if (ret == 0) {
-           // handler[msg.msq_id].handler(&msg);
+           // handler[msg.id].handler(&msg);
             k_free(msg.data);
         }
     }

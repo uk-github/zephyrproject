@@ -11,7 +11,7 @@
 #define LOG_LEVEL_FATAL     (4)
 #define LOG_OFF             (5)
 
-#define LOG_LEVEL           (LOG_LEVEL_DEBUG)
+#define LOG_LEVEL           (LOG_LEVEL_INFO)
 
 #if LOG_LEVEL <= LOG_LEVEL_DEBUG
 #define LOG_DEBUG(fmt, ...)     printk("[D] %s: %s(%d): " fmt "\n", LOG_TAG,  __func__, __LINE__, ##__VA_ARGS__)
@@ -33,7 +33,7 @@
 #define LOG_FATAL(fmt, ...)     printk("[F] %s: %s(%d): " fmt "\n", LOG_TAG,  __func__, __LINE__, ##__VA_ARGS__)
 #elif LOG_LEVEL <= LOG_LEVEL_ERROR
 #define LOG_DEBUG(fmt, ...)     do { } while (0)
-#define LOG_INFO(fmt, ...)      do { } while (0)
+        #define LOG_INFO(fmt, ...)      do { } while (0)
 #define LOG_WARN(fmt, ...)      do { } while (0)
 #define LOG_ERROR(fmt, ...)     printk("[E] %s: %s(%d): " fmt "\n", LOG_TAG,  __func__, __LINE__, ##__VA_ARGS__)
 #define LOG_FATAL(fmt, ...)     printk("[F] %s: %s(%d): " fmt "\n", LOG_TAG,  __func__, __LINE__, ##__VA_ARGS__)

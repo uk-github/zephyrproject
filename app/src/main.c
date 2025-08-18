@@ -13,6 +13,10 @@
 #include "battery.h"
 #endif
 
+#if CONFIG_SENS_MGR
+#include "sens_mgr.h"
+#endif
+
 #define LOG_TAG "MAIN"
 
 #define STACK_NAME(name)    name##_stack 
@@ -48,12 +52,20 @@ typedef struct __attribute__((packed)) {
     K_THREAD_STACK_DEFINE(STACK_NAME(battery), 1024);
 #endif
 
+#if CONFIG_SENS_MGR
+    K_THREAD_STACK_DEFINE(STACK_NAME(sens_mgr), 1024);
+#endif
+
 thread_info_t th_tble[] = {
 #if CONFIG_BT_SERVICE
     INIT_TH_TABLE(bt_service),
 #endif
 #if CONFIG_BATTERY
     INIT_TH_TABLE(battery),
+#endif
+
+#if CONFIG_SENS_MGR
+    INIT_TH_TABLE(sens_mgr),
 #endif
 };
 
@@ -63,6 +75,9 @@ module_info_t module_info[] = {
 #endif
 #if CONFIG_BATTERY
     INIT_MODULE(battery),
+#endif
+#if CONFIG_SENS_MGR
+    INIT_MODULE(sens_mgr),
 #endif
 };
 
@@ -86,7 +101,7 @@ int main(void) {
     while (1) {
         msg_t msg;
         if (k_msgq_get(&main_msgq, &msg, K_FOREVER) == 0) {
-            LOG_DEBUG("Received message of type %d with ID %d", msg.msq_type, msg.msq_id);
+            LOG_DEBUG("Received message of type %d with ID %d", msg.cmd, msg.id);
         }
         k_sleep(K_MSEC(1000));
         LOG_DEBUG("Main th is running");

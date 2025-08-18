@@ -1,0 +1,7 @@
+menu "SHELL ENABLED Configuration"
+config SHELL_ENABLED
+    bool "Enable SHELL_ENABLED"
+    default y
+    help
+        This enables SHELL_ENABLED in the app
+endmenu
