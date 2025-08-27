@@ -31,7 +31,7 @@ static ssize_t read_my_char(struct bt_conn *conn,
     BEGIN();
     const char *value = "this is esp32s3";
     int ret = bt_gatt_attr_read(conn, attr, buf, len, offset, value, strlen(value));
-    LOG_INFO("sent data: %s", value);
+    log_i("sent data: %s", value);
     END();
     return ret;
 }
@@ -43,7 +43,7 @@ static ssize_t write_my_char(struct bt_conn *conn,
     BEGIN();
     const char *data = (char *) buf;
     memcpy(acc_sve_value, data + offset, len);
-    LOG_INFO("received data: %s", acc_sve_value);
+    log_i("received data: %s", acc_sve_value);
     END();
     return len;
 }
@@ -54,14 +54,14 @@ static uint16_t indication_enabled;
 static void ccc_notify_cb(const struct bt_gatt_attr *attr, uint16_t value) {
     BEGIN();
     notify_enabled = value;
-    LOG_INFO("CCCD changed: %s", notify_enabled ? "enabled" : "disabled");
+    log_i("CCCD changed: %s", notify_enabled ? "enabled" : "disabled");
     END();
 }
 
 static void ccc_indication_cb(const struct bt_gatt_attr *attr, uint16_t value) {
     BEGIN();
     indication_enabled = value;
-    LOG_INFO("CCCD changed: %s", notify_enabled ? "enabled" : "disabled");
+    log_i("CCCD changed: %s", notify_enabled ? "enabled" : "disabled");
     END();
 }
 
@@ -84,9 +84,9 @@ void send_data(const uint8_t *msg, uint16_t len) {
     BEGIN();
     if (notify_enabled) {
         bt_gatt_notify(NULL, &acc_serivce.attrs[2], msg, len);
-        LOG_INFO("Sent to central: %s", msg);
+        log_i("Sent to central: %s", msg);
     } else {
-        LOG_WARN("not enabled");
+        log_w("not enabled");
     }
     END();
 }

@@ -30,7 +30,7 @@ int insert_sens_mgr_msgq(void *msg) {
     k_mutex_lock(&sens_mgr_mtx, K_FOREVER);
     int ret = k_msgq_put(&sens_mgr_msgq, (msg_t *) msg, K_NO_WAIT);
     if (ret != 0) {
-        LOG_ERROR("insert failed, ret:%d", ret);
+        log_e("insert failed, ret:%d", ret);
     }
     k_mutex_unlock(&sens_mgr_mtx);
     END();

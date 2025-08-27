@@ -8,6 +8,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/bt_service/inc)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/battery/inc)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/sens_mgr/inc)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/shell_cmd/inc)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/wifi_service/inc)
 
 if(CONFIG_BT_SERVICE)
 add_subdirectory(bt_service)
@@ -23,6 +24,10 @@ endif()
 
 if(CONFIG_SHELL_ENABLED)
 add_subdirectory(shell_cmd)
+endif()
+
+if(CONFIG_WIFI_SERVICE_ENABLED)
+add_subdirectory(wifi_service)
 endif()
 
 target_sources(app PRIVATE 

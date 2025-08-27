@@ -19,7 +19,7 @@ msg_handler_t handler[] = {
 
 static void conn_listener(uint8_t status, uint8_t reason) {
     BEGIN();
-    LOG_INFO("status: %u, reason: %u", status, reason);
+    log_i("status: %u, reason: %u", status, reason);
     END();
 }
 
@@ -41,7 +41,7 @@ int insert_bt_svc_msgq(void *msg) {
     BEGIN();
     int ret = k_msgq_put(&bt_svc_msgq, (msg_t *) msg, K_NO_WAIT);
     if (ret != 0) {
-        LOG_ERROR("insert failed, ret:%d", ret);
+        log_e("insert failed, ret:%d", ret);
     }
     END();
     return ret;

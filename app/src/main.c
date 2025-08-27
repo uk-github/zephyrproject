@@ -17,10 +17,15 @@
 #include "sens_mgr.h"
 #endif
 
+#if CONFIG_WIFI_SERVICE_ENABLED
+#include "wifi_service.h"
+#endif
+
 #define LOG_TAG "MAIN"
 
 #define STACK_NAME(name)    name##_stack 
 #define CB_NAME(name)       name##_th_cb
+#define TH_NAME(name)       name##_th
 #define INIT_TH_TABLE(name) { .stack_area = STACK_NAME(name), .stack_size = 1024, .cb = CB_NAME(name) }
 
 #define INIT_FUNC(name)     name##_init
@@ -79,6 +84,9 @@ module_info_t module_info[] = {
 #if CONFIG_SENS_MGR
     INIT_MODULE(sens_mgr),
 #endif
+#if CONFIG_WIFI_SERVICE_ENABLED
+    INIT_MODULE(wifi_service),
+#endif    
 };
 
 int main(void) {
@@ -101,10 +109,10 @@ int main(void) {
     while (1) {
         msg_t msg;
         if (k_msgq_get(&main_msgq, &msg, K_FOREVER) == 0) {
-            LOG_DEBUG("Received message of type %d with ID %d", msg.cmd, msg.id);
+            log_d("Received message of type %d with ID %d", msg.cmd, msg.id);
         }
         k_sleep(K_MSEC(1000));
-        LOG_DEBUG("Main th is running");
+        log_d("Main th is running");
     }
     END();  
     return 0;

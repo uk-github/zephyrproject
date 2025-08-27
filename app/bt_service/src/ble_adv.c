@@ -75,7 +75,7 @@ int set_conn_listener(conn_noti_cb notifier) {
 static void connected(struct bt_conn *conn, uint8_t err) {
     BEGIN();
 	if (err) {
-		LOG_ERROR("Connection failed err 0x%02x %s", err, bt_hci_err_to_str(err));
+		log_e("Connection failed err 0x%02x %s", err, bt_hci_err_to_str(err));
         return;
 	}
     if (notify_conn_status) notify_conn_status(0, err); // Notify success
@@ -84,7 +84,7 @@ static void connected(struct bt_conn *conn, uint8_t err) {
 
 static void disconnected(struct bt_conn *conn, uint8_t reason) {
     BEGIN();
-	LOG_INFO("Disconnected, reason 0x%02x %s", reason, bt_hci_err_to_str(reason));
+	log_i("Disconnected, reason 0x%02x %s", reason, bt_hci_err_to_str(reason));
     if (notify_conn_status) notify_conn_status(1, reason);
     END();
 }
@@ -105,7 +105,7 @@ static void start_advertise() {
 	BEGIN();
 	int err = bt_le_adv_start(&le_adv_param, ad, ARRAY_SIZE(ad), sd, ARRAY_SIZE(sd));
 	if (err) {
-		LOG_ERROR("Advertising failed to start (err %d)", err);
+		log_e("Advertising failed to start (err %d)", err);
 		return;
 	}
 	END();
@@ -120,18 +120,18 @@ static void bt_adv_work_cb(struct k_work *work) {
 static void bt_enable_cb(int err) {
     BEGIN();
 	if (err) {
-		LOG_ERROR("BT enable failed (err %d)", err);
+		log_e("BT enable failed (err %d)", err);
 		return;
 	}
     bt_addr_le_t addr;
     err = bt_addr_le_from_str("FF:EE:DD:CC:BB:AA", "random", &addr);
     if (err) {
-        LOG_ERROR("Invalid BT address (err %d)", err);
+        log_e("Invalid BT address (err %d)", err);
     }
 
     err = bt_id_create(&addr, NULL);
     if (err < 0) {
-        LOG_ERROR("Creating new ID failed (err %d)", err);
+        log_e("Creating new ID failed (err %d)", err);
     }
 
 	k_work_submit(&bt_adv_work);
@@ -142,7 +142,7 @@ static void auth_passkey_display(struct bt_conn *conn, uint32_t passkey) {
     BEGIN();
 	char addr[BT_ADDR_LE_STR_LEN];
 	bt_addr_le_to_str(bt_conn_get_dst(conn), addr, sizeof(addr));
-	LOG_INFO("Passkey for %s: %06u", addr, passkey);
+	log_i("Passkey for %s: %06u", addr, passkey);
     END();
 }
 
@@ -150,19 +150,19 @@ static void auth_cancel(struct bt_conn *conn) {
     BEGIN();
 	char addr[BT_ADDR_LE_STR_LEN];
 	bt_addr_le_to_str(bt_conn_get_dst(conn), addr, sizeof(addr));
-	LOG_INFO("Pairing cancelled: %s", addr);
+	log_i("Pairing cancelled: %s", addr);
     END();
 }
 
 static void pairing_complete(struct bt_conn *conn, bool bonded) {
     BEGIN();
-	LOG_INFO("Pairing Complete");
+	log_i("Pairing Complete");
     END();
 }
 
 static void pairing_failed(struct bt_conn *conn, enum bt_security_err reason) {
     BEGIN();
-	LOG_INFO("Pairing Failed (%d). Disconnecting.", reason);
+	log_i("Pairing Failed (%d). Disconnecting.", reason);
 	bt_conn_disconnect(conn, BT_HCI_ERR_AUTH_FAIL);
     END();
 }
@@ -182,7 +182,7 @@ int start_bluetooth(void) {
     BEGIN();
     k_work_init(&bt_adv_work, bt_adv_work_cb);
 	if (bt_enable(bt_enable_cb)) {
-		LOG_ERROR("BT enable failed");
+		log_e("BT enable failed");
 	}
     bt_conn_auth_cb_register(&auth_cb_display);
 	bt_conn_auth_info_cb_register(&auth_cb_info);

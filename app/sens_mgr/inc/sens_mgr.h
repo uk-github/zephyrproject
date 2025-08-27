@@ -15,7 +15,7 @@ typedef struct {
     sys_snode_t node;
 } sens_handler_t;
 
-int unreg_sensor(sens_type_t type, sens_handler_t *handle);
+int reg_sensor(sens_type_t type, sens_handler_t *handle);
 int unreg_sensor(sens_type_t type, sens_handler_t *handle);
 int unreg_sensor_all();
 

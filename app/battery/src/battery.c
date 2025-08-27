@@ -28,7 +28,7 @@ void battery_th_cb(void *arg1, void *arg2, void *arg3) {
         .temp_c = 35
     };
     while (1) {
-        LOG_INFO("inside thread");
+        log_d("inside thread");
         if (bat.chg_status == 1)  bat.bat_level += 1;
         else bat.bat_level -= 1;
 
@@ -40,7 +40,7 @@ void battery_th_cb(void *arg1, void *arg2, void *arg3) {
         } else bat.bat_full = 0;
 
         send_data_to_bt((const uint8_t *) &bat, sizeof(bat));
-        k_sleep(K_SECONDS(1));
+        k_sleep(K_SECONDS(60));
     }
     END();
 }

@@ -1,0 +1,25 @@
+menu "WIFI SERVICE Configuration"
+config WIFI_SERVICE_ENABLED
+    bool "Enable WIFI SERVICE_ENABLED"
+    default y
+    help
+        This enables WIFI SERVICE_ENABLED in the app
+
+config APP_WIFI_SSID
+    string "Wi-Fi SSID"
+    default "Disconnet"
+
+config APP_WIFI_PASSWORD
+    string "Wi-Fi password"
+    default "qwerfdsa"
+
+# Choose exactly one of these two
+choice
+    prompt "Wi-Fi security"
+    default APP_WIFI_SECURITY_PSK
+config APP_WIFI_SECURITY_OPEN
+    bool "Open (no password)"
+config APP_WIFI_SECURITY_PSK
+    bool "WPA2/WPA3 PSK"
+endchoice
+endmenu
